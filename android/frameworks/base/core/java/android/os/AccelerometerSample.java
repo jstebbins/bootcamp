@@ -6,12 +6,12 @@ import android.util.Log;
 public class AccelerometerSample implements Parcelable {
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public AcceleromenterSample createFromParcel(Parcel in) {
-            return new AcceleromenterSample(in);
+        public AccelerometerSample createFromParcel(Parcel in) {
+            return new AccelerometerSample(in);
         }
 
-        public AcceleromenterSample[] newArray(int size) {
-            return new AcceleromenterSample[size];
+        public AccelerometerSample[] newArray(int size) {
+            return new AccelerometerSample[size];
         }
     };
 
