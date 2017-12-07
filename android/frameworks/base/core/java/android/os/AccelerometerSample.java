@@ -5,7 +5,8 @@ import android.util.Log;
 
 public final class AccelerometerSample implements Parcelable {
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator<AccelerometerSample> CREATOR
+                            = new Parcelable.Creator<AccelerometerSample>() {
         public AccelerometerSample createFromParcel(Parcel in) {
             return new AccelerometerSample(in);
         }
