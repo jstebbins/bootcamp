@@ -68,7 +68,33 @@ public class AccelService extends IAccelService.Stub {
 	}
 
 	public int setSampleRate(int samplesPerSecond) {
-		Slog.i(TAG, "setSampleRate\n");
-		return 0;
+		String sysfs = new String("sys/bus/i2c/devices/1-0018/" + attr);
+		File file = new File(sysfs);
+		BufferedReader reader = null;
+		double value = 0.0;
+/*
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String text = null;
+
+			if ((text = reader.readLine()) != null) {
+				value = Integer.parseInt(text) / 32768.0 * 2.0;
+			}
+		} catch (FileNotFoundException e) {
+			Slog.e("File not found");
+		} catch (IOException e) {
+			Slog.e("Read error");
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		
+		Slog.i(TAG, "setSampleRate \n");
+*/
+		return value;
 	}
 }
