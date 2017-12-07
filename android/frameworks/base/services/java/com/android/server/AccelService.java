@@ -75,7 +75,7 @@ public class AccelService extends IAccelService.Stub {
 
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
-			String text = Integer.toString(samplesPerSecond));
+			String text = Integer.toString(samplesPerSecond);
 
 			writer.write(text, 0, text.length();
 		} catch (FileNotFoundException e) {
