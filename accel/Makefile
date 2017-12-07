@@ -1,5 +1,5 @@
 obj-m += accel.o
-KDIR := /shares/bootcamp/kernel
+KDIR := ~/kernel
 PWD := $(shell pwd)
 CROSS := arm-eabi-
 
