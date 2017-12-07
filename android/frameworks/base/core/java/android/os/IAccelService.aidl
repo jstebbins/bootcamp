@@ -16,6 +16,8 @@
 
 package android.os;
 
+import android.os.AccelerometerSample;
+
 /** {@hide} */
 interface IAccelService
 {

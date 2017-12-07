@@ -16,6 +16,7 @@
 
 package android.os;
 
+import android.os.AccelerometerSample;
 import android.util.Log;
 
 /**

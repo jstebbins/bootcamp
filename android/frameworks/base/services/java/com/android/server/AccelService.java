@@ -21,6 +21,7 @@ import java.io.*;
 import android.content.Context;
 import android.os.IAccelService;
 import android.util.Slog;
+import android.os.AccelerometerSample;
 
 public class AccelService extends IAccelService.Stub {
 	private static final String TAG = "AccelService";
@@ -68,16 +69,16 @@ public class AccelService extends IAccelService.Stub {
 	}
 
 	public int setSampleRate(int samplesPerSecond) {
-		String sysfs = new String("sys/bus/i2c/devices/1-0018/" + attr);
+		String sysfs = new String("sys/bus/i2c/devices/1-0018/rate");
 		File file = new File(sysfs);
-		BufferedReader reader = null;
+		BufferedWriter writer = null;
 		double value = 0.0;
 /*
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			writer = new BufferedWriter(new FileWriter(file));
 			String text = null;
 
-			if ((text = reader.readLine()) != null) {
+			if ((text = writer.writeLine(String()) != null) {
 				value = Integer.parseInt(text) / 32768.0 * 2.0;
 			}
 		} catch (FileNotFoundException e) {
@@ -86,8 +87,8 @@ public class AccelService extends IAccelService.Stub {
 			Slog.e("Read error");
 		} finally {
 			try {
-				if (reader != null) {
-					reader.close();
+				if (writer != null) {
+					writer.close();
 				}
 			} catch (IOException e) {
 			}
