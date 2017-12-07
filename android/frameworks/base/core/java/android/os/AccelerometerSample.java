@@ -24,6 +24,11 @@ public final class AccelerometerSample implements Parcelable {
         this.y = in.readDouble();
         this.z = in.readDouble();
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(x);
         dest.writeDouble(y);
