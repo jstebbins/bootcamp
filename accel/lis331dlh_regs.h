@@ -20,4 +20,7 @@
 #define LIS331DLH_OUT_Z_L_REG      0x2C
 #define LIS331DLH_OUT_Z_H_REG      0x2D
 
+#define LIS331DLH_DEF_PM           0x27
+#define LIS331DLH_REBOOT           0x80
+
 #endif

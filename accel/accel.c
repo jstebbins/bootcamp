@@ -17,32 +17,43 @@
 struct accel_device_data {
 };
 
+struct i2c_client * global_client;
 
 static ssize_t accel_x_show(struct device *dev,
                             struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO");
+    struct i2c_client * client;
+    s32 lo, hi;
+
+    client = dev_get_platdata(dev);
+    if (client == NULL) {
+        printk("client == NULL!\n");
+        return 0;
+    }
+    lo = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_X_L_REG);
+    hi = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_X_H_REG);
+    snprintf(buf, PAGE_SIZE, "%d\n", (s16)((hi << 8) + lo));
     return strlen(buf) + 1;
 }
 
 static ssize_t accel_y_show(struct device *dev,
                             struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO");
+    snprintf(buf, PAGE_SIZE, "TODO\n");
     return strlen(buf) + 1;
 }
 
 static ssize_t accel_z_show(struct device *dev,
                             struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO");
+    snprintf(buf, PAGE_SIZE, "TODO\n");
     return strlen(buf) + 1;
 }
 
 static ssize_t accel_rate_show(struct device *dev,
                                struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO");
+    snprintf(buf, PAGE_SIZE, "TODO\n");
     return strlen(buf) + 1;
 }
 
@@ -69,8 +80,19 @@ static DEVICE_ATTR(rate, 0644, accel_rate_show, accel_rate_store);
 static int accel_init(struct i2c_client * client,
                       struct accel_device_data *add)
 {
+    int ret;
     u32 who_am_i;
 
+    ret = i2c_smbus_write_byte_data(client, LIS331DLH_CTRL1_REG,
+                                            LIS331DLH_DEF_PM);
+    if (ret < 0) {
+        printk("error: i2c_smbus_write_byte_data %d\n", ret);
+    }
+    ret = i2c_smbus_write_byte_data(client, LIS331DLH_CTRL2_REG,
+                                            LIS331DLH_REBOOT);
+    if (ret < 0) {
+        printk("error: i2c_smbus_write_byte_data %d\n", ret);
+    }
     who_am_i = i2c_smbus_read_byte_data(client, LIS331DLH_WHO_AM_I_REG);
     printk("Who Am I %x\n", who_am_i);
     return 0;
@@ -97,6 +119,7 @@ static __devinit int accel_dev_probe(struct i2c_client *client,
 
     i2c_set_clientdata(client, add);
 
+    client->dev.platform_data = client;
     ret = device_create_file(&client->dev, &dev_attr_x);
     if (ret < 0)
         printk("device_create_file x FAILED!\n");
@@ -148,7 +171,6 @@ static struct i2c_driver accel_dev_driver = {
 static int __init accel_dev_init(void)
 {
     struct i2c_adapter    * adapter;
-    struct i2c_client     * client;
     struct i2c_board_info   info = {};
 
     printk("accel_dev_init\n");
@@ -161,8 +183,8 @@ static int __init accel_dev_init(void)
     strlcpy(info.type, "accelerometer", I2C_NAME_SIZE);
     info.addr = LIS331DLH_I2C_ADDR;
 
-    client = i2c_new_device(adapter, &info);
-    if (client == NULL) {
+    global_client = i2c_new_device(adapter, &info);
+    if (global_client == NULL) {
         printk("i2c_new_device failed\n");
         return -ENODEV;
     }
@@ -173,6 +195,7 @@ static int __init accel_dev_init(void)
 static void __exit accel_dev_exit(void)
 {
     printk("accel_dev_exit\n");
+    i2c_unregister_device(global_client);
     i2c_del_driver(&accel_dev_driver);
 }
 
