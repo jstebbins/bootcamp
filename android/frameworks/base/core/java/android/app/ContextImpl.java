@@ -70,6 +70,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.IWifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.nfc.NfcManager;
+import android.os.AccelServiceManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.DropBoxManager;
@@ -464,6 +465,11 @@ class ContextImpl extends Context {
         registerService(VIBRATOR_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new SystemVibrator();
+                }});
+
+        registerService("AccelerometerManager", new ServiceFetcher() {
+                public Object createService(ContextImpl ctx) {
+                    return new AccelServiceManager();
                 }});
 
         registerService("piservicemanager", new ServiceFetcher() {

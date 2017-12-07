@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *	  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,29 +19,44 @@ package android.os;
 import android.util.Log;
 
 /**
- * Pi Service Manager
+ * Accel Service Manager
  */
-public class PiServiceManager {
-    private static final String TAG = "PiService";
+public class AccelServiceManager {
+	private static final String TAG = "AccelServiceManager";
 
-    private final IPiService mService;
-    private final Binder mToken = new Binder();
+	private final IAccelService mService;
+	private final Binder mToken = new Binder();
 
-    public PiServiceManager() {
-        mService = IPiService.Stub.asInterface(
-                ServiceManager.getService("piservice"));
-    }
+	public AccelServiceManager() {
+		mService = IAccelService.Stub.asInterface(
+				ServiceManager.getService("accelservice"));
+	}
 
-    public double getPi() {
-        if (mService == null) {
-            Log.w(TAG, "Failed to getPi; no pi service.");
-            return 0.0;
-        }
-        try {
-	    Log.i(TAG, "Calling piservice getPi");
-            return mService.getPi();
-        } catch (RemoteException e) {
-        }
-        return 0.0;
-    }
+	public int readAcceleration(AccelerometerSample data) {
+		if (mService == null) {
+			Log.w(TAG, "Failed to readAcceleration: no accel service.");
+			return 0.0;
+		}
+		try {
+			Log.i(TAG, "Calling accelservice readAcceleration");
+			return mService.readAcceleration(data);
+		} catch (RemoteException e) {
+			Log.e(TAG, "Calling accelservice readAcceleration failed: " + e.getMessage());
+		}
+		return 0.0;
+	}
+
+	public int setSampleRate(int samplesPerSecond) {
+		if (mService == null) {
+			Log.w(TAG, "Failed to setSampleRate; no accel service.");
+			return 0.0;
+		}
+		try {
+			Log.i(TAG, "Calling accelservice setSampleRate");
+			return mService.setSampleRate(samplesPerSecond);
+		} catch (RemoteException e) {
+			Log.e(TAG, "Calling accelservice setSampleRate failed: " + e.getMessage());
+		}
+		return 0.0;
+	}
 }

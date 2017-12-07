@@ -121,6 +121,7 @@ class ServerThread extends Thread {
         BatteryService battery = null;
         VibratorService vibrator = null;
         PiService piservice = null;
+        AccelService accelservice = null;
         AlarmManagerService alarm = null;
         NetworkManagementService networkManagement = null;
         NetworkStatsService networkStats = null;
@@ -216,6 +217,10 @@ class ServerThread extends Thread {
             Slog.i(TAG, "Vibrator Service");
             vibrator = new VibratorService(context);
             ServiceManager.addService("vibrator", vibrator);
+
+            Slog.i(TAG, "Accel Service");
+            accelservice = new AccelService();
+            ServiceManager.addService("accelservice", accelservice);
 
             Slog.i(TAG, "Pi Service");
             piservice = new PiService();

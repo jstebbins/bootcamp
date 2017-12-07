@@ -17,8 +17,9 @@
 package android.os;
 
 /** {@hide} */
-interface IPiService
+interface IAccelService
 {
-	double getPi();
+	int readAcceleration(AccelerometerSample data);
+	int setSampleRate(int samplesPerSecond);
 }
 

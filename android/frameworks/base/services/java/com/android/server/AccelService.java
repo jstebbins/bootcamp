@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *	  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,21 +16,59 @@
 
 package com.android.server;
 
-import java.lang.Math;
+import java.io.*;
 
 import android.content.Context;
-import android.os.IPiService;
+import android.os.IAccelService;
 import android.util.Slog;
 
-public class PiService extends IPiService.Stub {
-    private static final String TAG = "PiService";
+public class AccelService extends IAccelService.Stub {
+	private static final String TAG = "AccelService";
 
-    PiService() {
-	    Slog.i(TAG, "PiService\n");
-    }
+	AccelService() {
+		Slog.i(TAG, "AccelService\n");
+	}
 
-    public double getPi() {
-	    Slog.i(TAG, "getPi\n");
-	    return Math.PI;
-    }
+	public int readAcceleration(AccelerometerSample data) {
+		data.x = getAcceleration("x");
+		data.y = getAcceleration("y");
+		data.z = getAcceleration("z");
+		return 0;
+	}
+	
+	public double getAcceleration(String attr) {
+		String sysfs = new String("sys/bus/i2c/devices/1-0018/" + attr);
+		File file = new File(sysfs);
+		BufferedReader reader = null;
+		double value = 0.0;
+
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String text = null;
+
+			if ((text = reader.readLine()) != null) {
+				value = Integer.parseInt(text) / 32768.0 * 2.0;
+			}
+		} catch (FileNotFoundException e) {
+			Slog.e("File not found");
+		} catch (IOException e) {
+			Slog.e("Read error");
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		
+		Slog.i(TAG, "readAcceleration\n");
+
+		return value;
+	}
+
+	public int setSampleRate(int samplesPerSecond) {
+		Slog.i(TAG, "setSampleRate\n");
+		return 0;
+	}
 }
