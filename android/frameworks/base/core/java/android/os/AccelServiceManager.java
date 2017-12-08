@@ -36,7 +36,7 @@ public class AccelServiceManager {
 	public int readAcceleration(AccelerometerSample data) {
 		if (mService == null) {
 			Log.w(TAG, "Failed to readAcceleration: no accel service.");
-			return 0.0;
+			return 0;
 		}
 		try {
 			Log.i(TAG, "Calling accelservice readAcceleration");
@@ -44,13 +44,13 @@ public class AccelServiceManager {
 		} catch (RemoteException e) {
 			Log.e(TAG, "Calling accelservice readAcceleration failed: " + e.getMessage());
 		}
-		return 0.0;
+		return 0;
 	}
 
 	public int setSampleRate(int samplesPerSecond) {
 		if (mService == null) {
 			Log.w(TAG, "Failed to setSampleRate; no accel service.");
-			return 0.0;
+			return 0;
 		}
 		try {
 			Log.i(TAG, "Calling accelservice setSampleRate");
@@ -58,6 +58,6 @@ public class AccelServiceManager {
 		} catch (RemoteException e) {
 			Log.e(TAG, "Calling accelservice setSampleRate failed: " + e.getMessage());
 		}
-		return 0.0;
+		return 0;
 	}
 }

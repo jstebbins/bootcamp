@@ -51,9 +51,9 @@ public class AccelService extends IAccelService.Stub {
 				value = Integer.parseInt(text) / 32768.0 * 2.0;
 			}
 		} catch (FileNotFoundException e) {
-			Slog.e("File not found");
+			Slog.e(TAG, "File not found");
 		} catch (IOException e) {
-			Slog.e("Read error");
+			Slog.e(TAG, "Read error");
 		} finally {
 			try {
 				if (reader != null) {
@@ -72,19 +72,16 @@ public class AccelService extends IAccelService.Stub {
 		String sysfs = new String("sys/bus/i2c/devices/1-0018/rate");
 		File file = new File(sysfs);
 		BufferedWriter writer = null;
-		double value = 0.0;
-/*
+
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
-			String text = null;
+			String text = Integer.toString(samplesPerSecond);
 
-			if ((text = writer.writeLine(String()) != null) {
-				value = Integer.parseInt(text) / 32768.0 * 2.0;
-			}
+			writer.write(text, 0, text.length());
 		} catch (FileNotFoundException e) {
-			Slog.e("File not found");
+			Slog.e(TAG, "File not found");
 		} catch (IOException e) {
-			Slog.e("Read error");
+			Slog.e(TAG, "Write error");
 		} finally {
 			try {
 				if (writer != null) {
@@ -94,8 +91,8 @@ public class AccelService extends IAccelService.Stub {
 			}
 		}
 		
-		Slog.i(TAG, "setSampleRate \n");
-*/
-		return value;
+		Slog.i(TAG, "setSampleRate to " + Integer.toString(samplesPerSecond) + "\n");
+
+		return 0;
 	}
 }
