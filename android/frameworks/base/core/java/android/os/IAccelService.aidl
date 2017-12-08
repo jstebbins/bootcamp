@@ -21,7 +21,7 @@ import android.os.AccelerometerSample;
 /** {@hide} */
 interface IAccelService
 {
-	int readAcceleration(in AccelerometerSample data);
-	int setSampleRate(out samplesPerSecond);
+	int readAcceleration(out AccelerometerSample data);
+	int setSampleRate(int samplesPerSecond);
 }
 
