@@ -46,7 +46,7 @@ public final class AccelerometerSample implements Parcelable {
         Log.i(TAG, "writeToParcel z " + Double.toString(z));
     }
 
-    private void readFromParcel(Parcel source) {
+    public void readFromParcel(Parcel source) {
         x = source.readDouble();
         y = source.readDouble();
         z = source.readDouble();
