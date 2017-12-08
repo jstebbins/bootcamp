@@ -39,8 +39,14 @@ public class AccelServiceManager {
 			return 0;
 		}
 		try {
+            int ret;
+
 			Log.i(TAG, "Calling accelservice readAcceleration");
-			return mService.readAcceleration(data);
+			ret = mService.readAcceleration(data);
+            Log.i(TAG, "x " + Double.toString(data.x) +
+                       " y " + Double.toString(data.y) +
+                       " z " + Double.toString(data.z));
+            return ret;
 		} catch (RemoteException e) {
 			Log.e(TAG, "Calling accelservice readAcceleration failed: " + e.getMessage());
 		}
