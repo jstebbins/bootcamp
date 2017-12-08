@@ -39,34 +39,104 @@ static ssize_t accel_x_show(struct device *dev,
 static ssize_t accel_y_show(struct device *dev,
                             struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO\n");
+    struct i2c_client * client;
+    s32 lo, hi;
+
+    client = dev_get_platdata(dev);
+    if (client == NULL) {
+        printk("client == NULL!\n");
+        return 0;
+    }
+    lo = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_Y_L_REG);
+    hi = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_Y_H_REG);
+    snprintf(buf, PAGE_SIZE, "%d\n", (s16)((hi << 8) + lo));
     return strlen(buf) + 1;
 }
 
 static ssize_t accel_z_show(struct device *dev,
                             struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO\n");
+    struct i2c_client * client;
+    s32 lo, hi;
+
+    client = dev_get_platdata(dev);
+    if (client == NULL) {
+        printk("client == NULL!\n");
+        return 0;
+    }
+    lo = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_Z_L_REG);
+    hi = i2c_smbus_read_byte_data(client, LIS331DLH_OUT_Z_H_REG);
+    snprintf(buf, PAGE_SIZE, "%d\n", (s16)((hi << 8) + lo));
     return strlen(buf) + 1;
 }
 
 static ssize_t accel_rate_show(struct device *dev,
                                struct device_attribute *attr, char *buf)
 {
-    snprintf(buf, PAGE_SIZE, "TODO\n");
+    struct i2c_client * client;
+    s32 rate;
+
+    client = dev_get_platdata(dev);
+    if (client == NULL) {
+        printk("client == NULL!\n");
+        return 0;
+    }
+    rate = i2c_smbus_read_byte_data(client, LIS331DLH_CTRL1_REG);
+    rate = (rate >> 3) & 0x3;
+    switch (rate) {
+        default:
+        case 0:
+            rate = 50;
+            break;
+        case 1:
+            rate = 100;
+            break;
+        case 2:
+            rate = 400;
+            break;
+        case 3:
+            rate = 1000;
+            break;
+    }
+    snprintf(buf, PAGE_SIZE, "%d\n", rate);
     return strlen(buf) + 1;
 }
 
-static void set_rate(int rate)
+static void set_rate(struct i2c_client * client, int rate)
 {
+    int ret;
+
+    if (rate <= 50)
+        rate = 0;
+    else if (rate <= 100)
+        rate = 1;
+    else if (rate <= 400)
+        rate = 2;
+    else
+        rate = 3;
+    ret = i2c_smbus_write_byte_data(client, LIS331DLH_CTRL1_REG,
+                                    LIS331DLH_DEF_PM | (rate << 3));
+    if (ret < 0) {
+        printk("error: i2c_smbus_write_byte_data %d\n", ret);
+    }
 }
 
 static ssize_t accel_rate_store(struct device *dev,
                                 struct device_attribute *attr,
                                 const char *buf, size_t count)
 {
+    struct i2c_client * client;
+    int rate;
+
     printk("store got (%s)\n", buf);
-    set_rate(0);
+    client = dev_get_platdata(dev);
+    if (client == NULL) {
+        printk("client == NULL!\n");
+        return count;
+    }
+
+    sscanf(buf, "%d", &rate);
+    set_rate(client, rate);
     return count;
 }
 
