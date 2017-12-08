@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.os.AccelerometerManager;
+import android.os.AccelServiceManager;
 import android.os.AccelerometerSample;
 
 public class MainActivity extends Activity {
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		private volatile boolean stop = false;
 		
 		public void run() {
-			AccelerometerManager accelerometerManager = (AccelerometerManager) getSystemService ("AccelerometerManager");
+			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
 
 			try {
 				while (stop == false)
@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
 		AccelerometerSample sample = new AccelerometerSample();
 		Log.v (TAG, "readAcceleration");
 	
-		AccelerometerManager accelManager = (AccelerometerManager) getSystemService ("AccelerometerManager");
+		AccelServiceManager accelManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
 
 		Log.v (TAG, "readAcceleration accelManager " + accelManager);
 
@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
 		if (sampleRateView.length() > 0) {
 			int samplesPerSecond = Integer.parseInt(sampleRateView.getText().toString());
 					
-			AccelerometerManager accelerometerManager = (AccelerometerManager) getSystemService ("AccelerometerManager");
+			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
 			error = accelerometerManager.setSampleRate (samplesPerSecond);
 			
 			Log.v (TAG, String.format("setSampleRate error=%d sammplesPerSecond=%d", error, samplesPerSecond));

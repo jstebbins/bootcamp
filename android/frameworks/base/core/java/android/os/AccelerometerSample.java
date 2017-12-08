@@ -20,6 +20,12 @@ public final class AccelerometerSample implements Parcelable {
 	public double y;
 	public double z;
 
+    public AccelerometerSample() {
+	    this.x = 0;
+	    this.y = 0;
+	    this.z = 0;
+    }
+
     public AccelerometerSample(Parcel in){
         this.x = in.readDouble();
         this.y = in.readDouble();
