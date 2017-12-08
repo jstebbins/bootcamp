@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		private volatile boolean stop = false;
 		
 		public void run() {
-			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
+			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AcceleratorManager");
 
 			try {
 				while (stop == false)
