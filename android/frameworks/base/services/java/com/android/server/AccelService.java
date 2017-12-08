@@ -75,9 +75,9 @@ public class AccelService extends IAccelService.Stub {
 
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
-			String text = Integer.toString(samplesPerSecond));
+			String text = Integer.toString(samplesPerSecond);
 
-			writer.write(text, 0, text.length();
+			writer.write(text, 0, text.length());
 		} catch (FileNotFoundException e) {
 			Slog.e(TAG, "File not found");
 		} catch (IOException e) {
@@ -91,7 +91,7 @@ public class AccelService extends IAccelService.Stub {
 			}
 		}
 		
-		Slog.i(TAG, "setSampleRate to " + samplesPerSecond + "\n");
+		Slog.i(TAG, "setSampleRate to " + Integer.toString(samplesPerSecond) + "\n");
 
 		return 0;
 	}
