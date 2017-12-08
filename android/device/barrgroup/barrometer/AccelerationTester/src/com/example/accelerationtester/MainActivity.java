@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		private volatile boolean stop = false;
 		
 		public void run() {
-			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AcceleratorManager");
+			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelerometerManager");
 
 			try {
 				while (stop == false)
@@ -63,11 +63,15 @@ public class MainActivity extends Activity {
 		AccelerometerSample sample = new AccelerometerSample();
 		Log.v (TAG, "readAcceleration");
 	
-		AccelServiceManager accelManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
+		AccelServiceManager accelManager = (AccelServiceManager) getSystemService ("AccelerometerManager");
 
 		Log.v (TAG, "readAcceleration accelManager " + accelManager);
 
-		error = accelManager.readAcceleration (sample);
+        try {
+		    error = accelManager.readAcceleration (sample);
+        } catch (Exception e) {
+            Log.v (TAG, "acclerationMonitor Exception: " + e);
+        }
 
 		Log.v (TAG, "readAcceleration error " + error);
 	
@@ -104,7 +108,7 @@ public class MainActivity extends Activity {
 		if (sampleRateView.length() > 0) {
 			int samplesPerSecond = Integer.parseInt(sampleRateView.getText().toString());
 					
-			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelServiceManager");
+			AccelServiceManager accelerometerManager = (AccelServiceManager) getSystemService ("AccelerometerManager");
 			error = accelerometerManager.setSampleRate (samplesPerSecond);
 			
 			Log.v (TAG, String.format("setSampleRate error=%d sammplesPerSecond=%d", error, samplesPerSecond));

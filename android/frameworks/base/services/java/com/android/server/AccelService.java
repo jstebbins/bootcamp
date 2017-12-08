@@ -31,6 +31,8 @@ public class AccelService extends IAccelService.Stub {
 	}
 
 	public int readAcceleration(AccelerometerSample data) {
+		Slog.i(TAG, "readAcceleration\n");
+
 		data.x = getAcceleration("x");
 		data.y = getAcceleration("y");
 		data.z = getAcceleration("z");
@@ -38,17 +40,20 @@ public class AccelService extends IAccelService.Stub {
 	}
 	
 	public double getAcceleration(String attr) {
-		String sysfs = new String("sys/bus/i2c/devices/1-0018/" + attr);
+		String sysfs = new String("/sys/bus/i2c/devices/1-0018/" + attr);
 		File file = new File(sysfs);
 		BufferedReader reader = null;
 		double value = 0.0;
 
+		Slog.i(TAG, "getAcceleration " + sysfs + "\n");
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String text = null;
 
 			if ((text = reader.readLine()) != null) {
 				value = Integer.parseInt(text) / 32768.0 * 2.0;
+                Slog.i(TAG, "Read: text " + text + " val " +
+                            Double.toString(value) + "\n");
 			}
 		} catch (FileNotFoundException e) {
 			Slog.e(TAG, "File not found");
@@ -63,19 +68,19 @@ public class AccelService extends IAccelService.Stub {
 			}
 		}
 		
-		Slog.i(TAG, "readAcceleration\n");
 
 		return value;
 	}
 
 	public int setSampleRate(int samplesPerSecond) {
-		String sysfs = new String("sys/bus/i2c/devices/1-0018/rate");
+		String sysfs = new String("/sys/bus/i2c/devices/1-0018/rate");
 		File file = new File(sysfs);
 		BufferedWriter writer = null;
 
+        Slog.i(TAG, "Rate File: " + sysfs + "\n");
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
-			String text = Integer.toString(samplesPerSecond);
+			String text = Integer.toString(samplesPerSecond) + "\n";
 
 			writer.write(text, 0, text.length());
 		} catch (FileNotFoundException e) {
